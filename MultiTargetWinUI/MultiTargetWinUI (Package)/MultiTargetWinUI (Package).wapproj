@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <PropertyGroup Condition="'$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '15.0'">
+        <VisualStudioVersion>15.0</VisualStudioVersion>
+    </PropertyGroup>
+    <ItemGroup Label="ProjectConfigurations">
+        <ProjectConfiguration Include="Debug|x86">
+            <Configuration>Debug</Configuration>
+            <Platform>x86</Platform>
+        </ProjectConfiguration>
+        <ProjectConfiguration Include="Release|x86">
+            <Configuration>Release</Configuration>
+            <Platform>x86</Platform>
+        </ProjectConfiguration>
+        <ProjectConfiguration Include="Debug|x64">
+            <Configuration>Debug</Configuration>
+            <Platform>x64</Platform>
+        </ProjectConfiguration>
+        <ProjectConfiguration Include="Release|x64">
+            <Configuration>Release</Configuration>
+            <Platform>x64</Platform>
+        </ProjectConfiguration>
+        <ProjectConfiguration Include="Debug|arm64">
+            <Configuration>Debug</Configuration>
+            <Platform>arm64</Platform>
+        </ProjectConfiguration>
+        <ProjectConfiguration Include="Release|arm64">
+            <Configuration>Release</Configuration>
+            <Platform>arm64</Platform>
+        </ProjectConfiguration>
+    </ItemGroup>
+    <PropertyGroup>
+        <WapProjPath Condition="'$(WapProjPath)'==''">$(MSBuildExtensionsPath)\Microsoft\DesktopBridge\</WapProjPath>
+        <PathToXAMLWinRTImplementations>MultiTargetWinUI\</PathToXAMLWinRTImplementations>
+    </PropertyGroup>
+    <Import Project="$(WapProjPath)\Microsoft.DesktopBridge.props" />
+    <PropertyGroup>
+        <ProjectGuid>047bf358-3e47-4267-890e-070361ffa450</ProjectGuid>
+        <TargetPlatformVersion>10.0.19041.0</TargetPlatformVersion>
+        <TargetPlatformMinVersion>10.0.17763.0</TargetPlatformMinVersion>
+        <DefaultLanguage>en-US</DefaultLanguage>
+        <AppxPackageSigningEnabled>false</AppxPackageSigningEnabled>
+        <EntryPointProjectUniqueName>..\MultiTargetWinUI\MultiTargetWinUI.csproj</EntryPointProjectUniqueName>
+        <!-- this was moved in the template to after the property was defined -->
+        <AssetTargetFallback>net5.0-windows$(TargetPlatformVersion);$(AssetTargetFallback)</AssetTargetFallback>
+    </PropertyGroup>
+    <ItemGroup>
+        <AppxManifest Include="Package.appxmanifest">
+            <SubType>Designer</SubType>
+        </AppxManifest>
+    </ItemGroup>
+    <ItemGroup>
+        <Content Include="Images\SplashScreen.scale-200.png" />
+        <Content Include="Images\LockScreenLogo.scale-200.png" />
+        <Content Include="Images\Square150x150Logo.scale-200.png" />
+        <Content Include="Images\Square44x44Logo.scale-200.png" />
+        <Content Include="Images\Square44x44Logo.targetsize-24_altform-unplated.png" />
+        <Content Include="Images\StoreLogo.png" />
+        <Content Include="Images\Wide310x150Logo.scale-200.png" />
+    </ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\MultiTargetWinUI\MultiTargetWinUI.csproj">
+            <SkipGetTargetFrameworkProperties>True</SkipGetTargetFrameworkProperties>
+            <PublishProfile>Properties\PublishProfiles\win10-$(Platform).pubxml</PublishProfile>
+        </ProjectReference>
+    </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="Microsoft.ProjectReunion" Version="[0.5.6]">
+            <IncludeAssets>build</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="Microsoft.ProjectReunion.WinUI" Version="[0.5.6]">
+            <IncludeAssets>build</IncludeAssets>
+        </PackageReference>
+    </ItemGroup>
+    <Import Project="$(WapProjPath)\Microsoft.DesktopBridge.targets" />
+    <!-- inject the windows TFM into the builds of the app project -->
+    <Target Name="FixFrameworksBefore" BeforeTargets="SetProjectReferenceProperties">
+        <ItemGroup>
+            <_MSBuildProjectReferenceExistent Update="@(_MSBuildProjectReferenceExistent)" SetConfiguration="TargetFramework=net5.0-windows$(TargetPlatformVersion)" SetPlatform="Platform=$(Platform)" />
+        </ItemGroup>
+    </Target>
+    <!-- overwrite the properties set by the AddProjectMetadata task as it was chacking the outer build -->
+    <Target Name="FixFrameworksAfter" AfterTargets="SetProjectReferenceProperties">
+        <ItemGroup>
+            <ProjectReferenceWithExtraMetadata Update="@(ProjectReferenceWithExtraMetadata)">
+                <ReferenceSourceTarget>ProjectReference</ReferenceSourceTarget>
+                <SkipGetTargetFrameworkProperties>True</SkipGetTargetFrameworkProperties>
+                <TargetFramework>net5.0-windows$(TargetPlatformVersion)</TargetFramework>
+                <TargetFrameworkIdentifier>.NETCoreApp</TargetFrameworkIdentifier>
+                <AdditionalProperties>
+                </AdditionalProperties>
+                <TargetFileName>%(Filename).dll</TargetFileName>
+                <ReferenceOutputAssembly>true</ReferenceOutputAssembly>
+                <PublishProfile>Properties\PublishProfiles\win10-x86.pubxml</PublishProfile>
+                <WindowsAppContainer>
+                </WindowsAppContainer>
+                <Private>false</Private>
+                <MsixConfiguration>Debug</MsixConfiguration>
+                <OutputItemType>
+                </OutputItemType>
+                <BuildReference>true</BuildReference>
+                <OutputType>WinExe</OutputType>
+                <MsbuildProjectExtensionsPath>%(Identity)..\obj\</MsbuildProjectExtensionsPath>
+                <RuntimeIdentifiers>win10-x86;win10-x86;win10-arm64</RuntimeIdentifiers>
+                <DependencyKind>Direct</DependencyKind>
+                <ProjectGuid></ProjectGuid>
+                <TargetFrameworkMoniker>.NETCoreApp,Version=v5.0</TargetFrameworkMoniker>
+                <Configuration>$(Configuration)</Configuration>
+                <AppxRecipeFilePath>%(Identity)..\bin\$(Platform)\$(Configuration)\net5.0-windows$(TargetPlatformVersion)\%(Filename).dll.build.appxrecipe</AppxRecipeFilePath>
+                <ProjectName>%(Filename)</ProjectName>
+                <TargetPlatformIdentifier>Windows</TargetPlatformIdentifier>
+                <AppxUploadRecipeFilePath>%(Identity)..\bin\$(Platform)\$(Configuration)\net5.0-windows$(TargetPlatformVersion)\Upload\%(Filename).build.appxrecipe</AppxUploadRecipeFilePath>
+                <TargetPlatformMinVersion>$(TargetPlatformMinVersion)</TargetPlatformMinVersion>
+                <TargetName>%(Filename)</TargetName>
+                <TargetDir>%(Identity)..\bin\$(Platform)\$(Configuration)\net5.0-windows$(TargetPlatformVersion)\</TargetDir>
+                <CrtSDKReferenceVersion></CrtSDKReferenceVersion>
+                <PlatformTarget>$(Platform)</PlatformTarget>
+            </ProjectReferenceWithExtraMetadata>
+        </ItemGroup>
+    </Target>
+</Project>
