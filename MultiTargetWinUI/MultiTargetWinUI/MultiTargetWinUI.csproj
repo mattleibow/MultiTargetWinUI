@@ -27,7 +27,7 @@
         <Manifest Include="$(ApplicationManifest)" />
     </ItemGroup>
 
-    <!-- workaround for https://github.com/microsoft/ProjectReunion/pull/707 -->
+    <!-- HACK: workaround for https://github.com/microsoft/ProjectReunion/pull/707 -->
     <Target Name="WinUIWorkaround"
             BeforeTargets="_GetSdkToolsPathsFromSdk"
             Condition="$(TargetFramework.Contains('-windows'))">

@@ -41,8 +41,9 @@
         <DefaultLanguage>en-US</DefaultLanguage>
         <AppxPackageSigningEnabled>false</AppxPackageSigningEnabled>
         <EntryPointProjectUniqueName>..\MultiTargetWinUI\MultiTargetWinUI.csproj</EntryPointProjectUniqueName>
+        <AppProjectTargetFramework>net5.0-windows$(TargetPlatformVersion)</AppProjectTargetFramework>
         <!-- this was moved in the template to after the property was defined -->
-        <AssetTargetFallback>net5.0-windows$(TargetPlatformVersion);$(AssetTargetFallback)</AssetTargetFallback>
+        <AssetTargetFallback>$(AppProjectTargetFramework);$(AssetTargetFallback)</AssetTargetFallback>
     </PropertyGroup>
     <ItemGroup>
         <AppxManifest Include="Package.appxmanifest">
@@ -73,19 +74,19 @@
         </PackageReference>
     </ItemGroup>
     <Import Project="$(WapProjPath)\Microsoft.DesktopBridge.targets" />
-    <!-- inject the windows TFM into the builds of the app project -->
+    <!-- HACK: inject the windows TFM into the builds of the app project -->
     <Target Name="FixFrameworksBefore" BeforeTargets="SetProjectReferenceProperties">
         <ItemGroup>
-            <_MSBuildProjectReferenceExistent Update="@(_MSBuildProjectReferenceExistent)" SetConfiguration="TargetFramework=net5.0-windows$(TargetPlatformVersion)" SetPlatform="Platform=$(Platform)" />
+            <_MSBuildProjectReferenceExistent Update="@(_MSBuildProjectReferenceExistent)" SetConfiguration="TargetFramework=$(AppProjectTargetFramework)" SetPlatform="Platform=$(Platform)" />
         </ItemGroup>
     </Target>
-    <!-- overwrite the properties set by the AddProjectMetadata task as it was chacking the outer build -->
+    <!-- HACK: overwrite the properties set by the AddProjectMetadata task as it was chacking the outer build -->
     <Target Name="FixFrameworksAfter" AfterTargets="SetProjectReferenceProperties">
         <ItemGroup>
             <ProjectReferenceWithExtraMetadata Update="@(ProjectReferenceWithExtraMetadata)">
                 <ReferenceSourceTarget>ProjectReference</ReferenceSourceTarget>
                 <SkipGetTargetFrameworkProperties>True</SkipGetTargetFrameworkProperties>
-                <TargetFramework>net5.0-windows$(TargetPlatformVersion)</TargetFramework>
+                <TargetFramework>$(AppProjectTargetFramework)</TargetFramework>
                 <TargetFrameworkIdentifier>.NETCoreApp</TargetFrameworkIdentifier>
                 <AdditionalProperties>
                 </AdditionalProperties>
@@ -106,13 +107,13 @@
                 <ProjectGuid></ProjectGuid>
                 <TargetFrameworkMoniker>.NETCoreApp,Version=v5.0</TargetFrameworkMoniker>
                 <Configuration>$(Configuration)</Configuration>
-                <AppxRecipeFilePath>%(Identity)..\bin\$(Platform)\$(Configuration)\net5.0-windows$(TargetPlatformVersion)\%(Filename).dll.build.appxrecipe</AppxRecipeFilePath>
+                <AppxRecipeFilePath>%(Identity)..\bin\$(Platform)\$(Configuration)\$(AppProjectTargetFramework)\%(Filename).dll.build.appxrecipe</AppxRecipeFilePath>
                 <ProjectName>%(Filename)</ProjectName>
                 <TargetPlatformIdentifier>Windows</TargetPlatformIdentifier>
-                <AppxUploadRecipeFilePath>%(Identity)..\bin\$(Platform)\$(Configuration)\net5.0-windows$(TargetPlatformVersion)\Upload\%(Filename).build.appxrecipe</AppxUploadRecipeFilePath>
+                <AppxUploadRecipeFilePath>%(Identity)..\bin\$(Platform)\$(Configuration)\$(AppProjectTargetFramework)\Upload\%(Filename).build.appxrecipe</AppxUploadRecipeFilePath>
                 <TargetPlatformMinVersion>$(TargetPlatformMinVersion)</TargetPlatformMinVersion>
                 <TargetName>%(Filename)</TargetName>
-                <TargetDir>%(Identity)..\bin\$(Platform)\$(Configuration)\net5.0-windows$(TargetPlatformVersion)\</TargetDir>
+                <TargetDir>%(Identity)..\bin\$(Platform)\$(Configuration)\$(AppProjectTargetFramework)\</TargetDir>
                 <CrtSDKReferenceVersion></CrtSDKReferenceVersion>
                 <PlatformTarget>$(Platform)</PlatformTarget>
             </ProjectReferenceWithExtraMetadata>
