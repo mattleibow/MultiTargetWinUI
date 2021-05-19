@@ -2,6 +2,7 @@
 
     <PropertyGroup>
         <TargetFrameworks>net5.0-windows10.0.19041.0</TargetFrameworks>
+        <!--<TargetFrameworks>net5.0-windows10.0.19041.0;net6.0-android;net6.0-ios</TargetFrameworks>-->
         <RootNamespace>MultiTargetWinUI</RootNamespace>
     </PropertyGroup>
 
@@ -18,5 +19,9 @@
         <PackageReference Include="Microsoft.ProjectReunion.WinUI" Version="0.5.7" />
         <Manifest Include="$(ApplicationManifest)" />
     </ItemGroup>
+
+    <!--<ItemGroup Condition="!$(TargetFramework.Contains('-windows'))">
+        <Compile Remove="**\*.cs" />
+    </ItemGroup>-->
 
 </Project>
