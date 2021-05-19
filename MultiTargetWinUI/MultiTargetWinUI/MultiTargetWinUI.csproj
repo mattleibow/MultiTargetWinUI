@@ -9,31 +9,14 @@
         <OutputType>WinExe</OutputType>
         <TargetPlatformMinVersion>10.0.17763.0</TargetPlatformMinVersion>
         <ApplicationManifest>app.manifest</ApplicationManifest>
-        <RuntimeIdentifiers>win10-x86;win10-x64;win10-arm64</RuntimeIdentifiers>
-
-        <!--
-            Uncommenting the following line makes it all work again,
-            however this is not possible because no other platform
-            uses anything other than Any CPU to build the managed dlls.
-        -->
-        <!--<Platforms>x86;x64;arm64</Platforms>-->
     </PropertyGroup>
 
     <!-- this is to get around the fact that the build targets are not TFM specific in the nugets -->
     <ItemGroup Condition="$(TargetFramework.Contains('-windows'))">
-        <PackageReference Include="Microsoft.ProjectReunion" Version="0.5.6" />
-        <PackageReference Include="Microsoft.ProjectReunion.Foundation" Version="0.5.6" />
-        <PackageReference Include="Microsoft.ProjectReunion.WinUI" Version="0.5.6" />
+        <PackageReference Include="Microsoft.ProjectReunion" Version="0.5.7" />
+        <PackageReference Include="Microsoft.ProjectReunion.Foundation" Version="0.5.7" />
+        <PackageReference Include="Microsoft.ProjectReunion.WinUI" Version="0.5.7" />
         <Manifest Include="$(ApplicationManifest)" />
     </ItemGroup>
-
-    <!-- HACK: workaround for https://github.com/microsoft/ProjectReunion/pull/707 -->
-    <Target Name="WinUIWorkaround"
-            BeforeTargets="_GetSdkToolsPathsFromSdk"
-            Condition="$(TargetFramework.Contains('-windows'))">
-        <PropertyGroup>
-            <TargetPlatformIdentifierAdjusted>UAP</TargetPlatformIdentifierAdjusted>
-        </PropertyGroup>
-    </Target>
 
 </Project>

@@ -42,7 +42,6 @@
         <AppxPackageSigningEnabled>false</AppxPackageSigningEnabled>
         <EntryPointProjectUniqueName>..\MultiTargetWinUI\MultiTargetWinUI.csproj</EntryPointProjectUniqueName>
         <AppProjectTargetFramework>net5.0-windows$(TargetPlatformVersion)</AppProjectTargetFramework>
-        <!-- this was moved in the template to after the property was defined -->
         <AssetTargetFallback>$(AppProjectTargetFramework);$(AssetTargetFallback)</AssetTargetFallback>
     </PropertyGroup>
     <ItemGroup>
@@ -66,10 +65,10 @@
         </ProjectReference>
     </ItemGroup>
     <ItemGroup>
-        <PackageReference Include="Microsoft.ProjectReunion" Version="[0.5.6]">
+        <PackageReference Include="Microsoft.ProjectReunion" Version="[0.5.7]">
             <IncludeAssets>build</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="Microsoft.ProjectReunion.WinUI" Version="[0.5.6]">
+        <PackageReference Include="Microsoft.ProjectReunion.WinUI" Version="[0.5.7]">
             <IncludeAssets>build</IncludeAssets>
         </PackageReference>
     </ItemGroup>
@@ -77,7 +76,9 @@
     <!-- HACK: inject the windows TFM into the builds of the app project -->
     <Target Name="FixFrameworksBefore" BeforeTargets="SetProjectReferenceProperties">
         <ItemGroup>
-            <_MSBuildProjectReferenceExistent Update="@(_MSBuildProjectReferenceExistent)" SetConfiguration="TargetFramework=$(AppProjectTargetFramework)" SetPlatform="Platform=$(Platform)" />
+            <_MSBuildProjectReferenceExistent
+                Update="@(_MSBuildProjectReferenceExistent)"
+                SetConfiguration="TargetFramework=$(AppProjectTargetFramework)" />
         </ItemGroup>
     </Target>
     <!-- HACK: overwrite the properties set by the AddProjectMetadata task as it was chacking the outer build -->
@@ -92,7 +93,7 @@
                 </AdditionalProperties>
                 <TargetFileName>%(Filename).dll</TargetFileName>
                 <ReferenceOutputAssembly>true</ReferenceOutputAssembly>
-                <PublishProfile>Properties\PublishProfiles\win10-x86.pubxml</PublishProfile>
+                <PublishProfile>Properties\PublishProfiles\win10-$(Platform).pubxml</PublishProfile>
                 <WindowsAppContainer>
                 </WindowsAppContainer>
                 <Private>false</Private>
@@ -107,15 +108,15 @@
                 <ProjectGuid></ProjectGuid>
                 <TargetFrameworkMoniker>.NETCoreApp,Version=v5.0</TargetFrameworkMoniker>
                 <Configuration>$(Configuration)</Configuration>
-                <AppxRecipeFilePath>%(Identity)..\bin\$(Platform)\$(Configuration)\$(AppProjectTargetFramework)\%(Filename).dll.build.appxrecipe</AppxRecipeFilePath>
+                <AppxRecipeFilePath>%(Identity)..\bin\$(Configuration)\$(AppProjectTargetFramework)\%(Filename).dll.build.appxrecipe</AppxRecipeFilePath>
                 <ProjectName>%(Filename)</ProjectName>
                 <TargetPlatformIdentifier>Windows</TargetPlatformIdentifier>
-                <AppxUploadRecipeFilePath>%(Identity)..\bin\$(Platform)\$(Configuration)\$(AppProjectTargetFramework)\Upload\%(Filename).build.appxrecipe</AppxUploadRecipeFilePath>
+                <AppxUploadRecipeFilePath>%(Identity)..\bin\$(Configuration)\$(AppProjectTargetFramework)\Upload\%(Filename).build.appxrecipe</AppxUploadRecipeFilePath>
                 <TargetPlatformMinVersion>$(TargetPlatformMinVersion)</TargetPlatformMinVersion>
                 <TargetName>%(Filename)</TargetName>
-                <TargetDir>%(Identity)..\bin\$(Platform)\$(Configuration)\$(AppProjectTargetFramework)\</TargetDir>
+                <TargetDir>%(Identity)..\bin\$(Configuration)\$(AppProjectTargetFramework)\</TargetDir>
                 <CrtSDKReferenceVersion></CrtSDKReferenceVersion>
-                <PlatformTarget>$(Platform)</PlatformTarget>
+                <PlatformTarget>AnyCPU</PlatformTarget>
             </ProjectReferenceWithExtraMetadata>
         </ItemGroup>
     </Target>
