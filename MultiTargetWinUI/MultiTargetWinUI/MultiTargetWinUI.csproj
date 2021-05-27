@@ -14,9 +14,9 @@
 
     <!-- this is to get around the fact that the build targets are not TFM specific in the nugets -->
     <ItemGroup Condition="$(TargetFramework.Contains('-windows'))">
-        <PackageReference Include="Microsoft.ProjectReunion" Version="0.5.7" />
-        <PackageReference Include="Microsoft.ProjectReunion.Foundation" Version="0.5.7" />
-        <PackageReference Include="Microsoft.ProjectReunion.WinUI" Version="0.5.7" />
+        <PackageReference Include="Microsoft.ProjectReunion" Version="0.8.0-20210526.1.preview.CI" />
+        <PackageReference Include="Microsoft.ProjectReunion.Foundation" Version="0.8.0-20210526.1.preview.CI" />
+        <PackageReference Include="Microsoft.ProjectReunion.WinUI" Version="0.8.0-20210526.1.preview.CI" />
         <Manifest Include="$(ApplicationManifest)" />
     </ItemGroup>
 
