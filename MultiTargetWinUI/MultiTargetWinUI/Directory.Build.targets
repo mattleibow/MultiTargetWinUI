@@ -1,7 +1,21 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 
+    <!-- chanks based on Platform, which is now AnyCPU -->
     <Target Name="ValidateWinUIPlatform" />
     <Target Name="BinPlaceBootstrapDll" />
+    
+   <!-- HACK: fix a bad path or something -->
+  <Target Name="_Prep_ComputeProcessXamlFilesBefore" BeforeTargets="Prep_ComputeProcessXamlFiles" Condition="$(TargetFramework.Contains('-windows'))">
+    <PropertyGroup>
+      <_OldOutputPath>$(OutputPath)</_OldOutputPath>
+      <OutputPath>$(OutputPath)\$(RootNamespace)</OutputPath>
+    </PropertyGroup>
+  </Target>
+  <Target Name="_Prep_ComputeProcessXamlFilesAfter" AfterTargets="Prep_ComputeProcessXamlFiles" Condition="$(TargetFramework.Contains('-windows'))">
+    <PropertyGroup>
+      <OutputPath>$(_OldOutputPath)</OutputPath>
+    </PropertyGroup>
+  </Target>
 
 </Project>
